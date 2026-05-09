@@ -15,7 +15,7 @@ COPY src/web/${TARGET}/ ./${TARGET}/
 RUN npm ci && npm run build --workspace=${TARGET}
 
 # Stage 2: Build Go binaries
-FROM golang:1.25-alpine AS builder
+FROM golang:1.26-alpine AS builder
 ARG TARGET=frps
 ARG LDFLAGS="-s -w"
 RUN apk add --no-cache gcc musl-dev git
