@@ -6,7 +6,7 @@
 # =============================================================================
 
 # Stage 1: Build web dashboard (npm workspaces — shared, frps, frpc)
-FROM node:22-alpine AS web-builder
+FROM node:26-alpine AS web-builder
 ARG TARGET=frps
 WORKDIR /web
 COPY src/web/package.json src/web/package-lock.json ./
