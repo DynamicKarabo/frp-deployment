@@ -27,7 +27,7 @@ COPY --from=web-builder /web/${TARGET}/dist /build/web/${TARGET}/dist
 RUN CGO_ENABLED=0 go build -trimpath -ldflags="${LDFLAGS}" -tags "${TARGET}" -o /usr/local/bin/${TARGET} ./cmd/${TARGET}
 
 # Stage 3: Minimal runtime
-FROM alpine:3.21
+FROM alpine:3.23
 ARG TARGET=frps
 RUN apk add --no-cache ca-certificates tzdata && \
     addgroup -g 10001 -S app && \
