@@ -6,7 +6,7 @@
 # =============================================================================
 
 # Stage 1: Build web dashboard (npm workspaces — shared, frps, frpc)
-FROM node:22-alpine AS web-builder
+FROM node:26-alpine AS web-builder
 ARG TARGET=frps
 WORKDIR /web
 COPY src/web/package.json src/web/package-lock.json ./
@@ -15,7 +15,7 @@ COPY src/web/${TARGET}/ ./${TARGET}/
 RUN npm ci && npm run build --workspace=${TARGET}
 
 # Stage 2: Build Go binaries
-FROM golang:1.25-alpine AS builder
+FROM golang:1.26-alpine AS builder
 ARG TARGET=frps
 ARG LDFLAGS="-s -w"
 RUN apk add --no-cache gcc musl-dev git
@@ -27,7 +27,7 @@ COPY --from=web-builder /web/${TARGET}/dist /build/web/${TARGET}/dist
 RUN CGO_ENABLED=0 go build -trimpath -ldflags="${LDFLAGS}" -tags "${TARGET}" -o /usr/local/bin/${TARGET} ./cmd/${TARGET}
 
 # Stage 3: Minimal runtime
-FROM alpine:3.21
+FROM alpine:3.23
 ARG TARGET=frps
 RUN apk add --no-cache ca-certificates tzdata && \
     addgroup -g 10001 -S app && \
